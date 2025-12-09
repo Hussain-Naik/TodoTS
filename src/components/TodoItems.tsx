@@ -1,5 +1,7 @@
 import { Trash2 } from "lucide-react";
 import type { Todo } from "../types/todo";
+import Modal from "./Modal";
+import { useState } from "react";
 
 interface TodoItemsProps {
   todo: Todo;
@@ -12,6 +14,7 @@ export default function TodoItems({
   onCompleteChange,
   onDelete,
 }: TodoItemsProps) {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <div key={todo.id} className="flex items-center-safe gap-1">
       <label className="flex grow items-center gap-2 mt-3 mx-1 p-3 border border-gray-200 rounded shadow">
@@ -25,7 +28,13 @@ export default function TodoItems({
           {todo.title}
         </span>
       </label>
-      <Trash2 size={20} onClick={() => onDelete(todo.id)} className="items-center align-middle mt-3 hover:text-red-500"/>
+      <Trash2 size={20} onClick={() => setModalOpen(!modalOpen)} className="items-center align-middle mt-3 hover:text-red-500"/>
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(!modalOpen)}>
+          <p>{todo.title}</p>
+          <button onClick={() => onDelete(todo.id)} className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+            Confirm Delete
+          </button>
+        </Modal>
     </div>
   );
 }
